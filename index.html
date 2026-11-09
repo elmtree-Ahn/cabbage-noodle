@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>보라색 국수 실험실 | 어게인 실험과학 수학학원</title>
+<meta name="description" content="적양배추 지시약과 보라색 국수로 알아보는 산성과 염기성">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#fffaf0; --sea:#e6dcfb; --blue:#7b52c9; --blue-d:#5a379e;
+  --sand2:#ffd666; --sand-d:#e0b52e;
+  --ink:#33414f; --sub:#6c7a8a; --line:#e6dcc4; --ok:#2fb36b; --ok-d:#177a45; --coral:#ff8a7a;
+  --lab:#f3efff; --lab2:#d9cdf6;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--cream);color:var(--ink);font-family:"Noto Sans KR",system-ui,sans-serif;font-weight:500}
+body{min-height:100vh;display:flex;flex-direction:column;-webkit-user-select:none;user-select:none;overflow-x:hidden}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+
+.bbtn{font-family:"Jua",sans-serif;font-size:22px;min-height:60px;padding:10px 28px;color:#fff;background:var(--blue);border-radius:999px;
+  box-shadow:inset 0 -6px 0 rgba(0,0,0,.12),0 5px 0 var(--blue-d);word-break:keep-all;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.bbtn:active{transform:translateY(3px)}
+.bbtn.sand{background:var(--sand2);color:#5a4300;box-shadow:inset 0 -6px 0 rgba(0,0,0,.08),0 5px 0 var(--sand-d)}
+.bbtn.plain{background:#fff;color:var(--blue-d);box-shadow:inset 0 0 0 3px var(--sea),0 4px 0 var(--line)}
+.bbtn[hidden]{display:none}
+.bbtn:disabled{opacity:.45;transform:none}
+
+header{position:sticky;top:0;z-index:30;background:#fff;box-shadow:0 3px 0 var(--line);padding:10px 16px}
+.head-in{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.titles{flex:1;min-width:0}
+.titles .brand{font-family:"Jua",sans-serif;font-size:15px;color:var(--sub)}
+.titles h1{margin:0;font-family:"Jua",sans-serif;font-weight:400;font-size:clamp(24px,4vw,34px);color:var(--blue);line-height:1.1}
+.share{font-size:19px;min-height:54px;padding:8px 22px;flex:none}
+
+nav{max-width:1000px;width:100%;margin:14px auto 0;padding:0 16px;display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.tab{min-height:72px;border-radius:20px;background:#fff;font-family:"Jua",sans-serif;font-size:clamp(15px,2vw,18px);line-height:1.2;padding:6px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:3px solid transparent;box-shadow:0 3px 0 var(--line);word-break:keep-all}
+.tab .n{width:26px;height:26px;border-radius:50%;background:var(--sea);color:var(--blue-d);display:grid;place-items:center;font-size:15px}
+.tab.on{border-color:var(--blue);color:var(--blue-d)}
+.tab.done .n{background:var(--ok);color:#fff}
+.tab.done .n::after{content:"✓"}
+.tab.done .n span{display:none}
+
+main{flex:1;max-width:1000px;width:100%;margin:0 auto;padding:14px 16px 24px}
+.panel{display:none}
+.panel.on{display:block}
+.coach{font-family:"Jua",sans-serif;font-size:clamp(19px,2.6vw,24px);line-height:1.4;background:#fff;border-radius:22px;padding:14px 18px;box-shadow:0 3px 0 var(--line);word-break:keep-all;min-height:62px}
+.coach b{color:var(--blue-d);font-weight:400}
+
+.stage{position:relative;margin-top:12px;background:var(--lab);border-radius:26px;overflow:hidden;box-shadow:inset 0 0 0 4px var(--lab2)}
+.stage svg.scene{display:block;width:100%;height:auto;touch-action:none}
+.stage svg text{font-family:"Jua",sans-serif;text-anchor:middle;dominant-baseline:middle;pointer-events:none}
+.row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.status{margin-top:12px;text-align:center;font-family:"Jua",sans-serif;font-size:clamp(19px,2.6vw,23px);line-height:1.35;word-break:keep-all;min-height:32px}
+
+.card{margin-top:16px;background:#fff;border:4px solid var(--ok);border-radius:24px;padding:16px 20px;text-align:center;display:none}
+.card.on{display:block;animation:pop .5s}
+.card h3{margin:0 0 12px;font-family:"Jua",sans-serif;font-weight:400;font-size:clamp(22px,3vw,28px);line-height:1.4;color:var(--ok-d);word-break:keep-all}
+@keyframes pop{0%{transform:scale(.9);opacity:0}100%{transform:none;opacity:1}}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* 1. 신맛 고르기 · 5. 자연 속 */
+.picks{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;padding:14px}
+.pick{position:relative;background:#fff;border:4px solid var(--lab2);border-radius:20px;min-height:132px;padding:6px 2px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-family:"Jua",sans-serif;font-size:20px;word-break:keep-all;text-align:center;line-height:1.2}
+.pick svg{width:72px;height:72px;display:block;pointer-events:none}
+.pick.sel{border-color:var(--blue);background:#f7f2ff}
+.pick.sel::after{content:"";position:absolute;inset:6px;border:5px solid #e0457b;border-radius:50%;pointer-events:none}
+.pick.wrong{animation:shake .4s}
+.pick.seen{border-color:var(--ok)}
+.pick small{font-family:"Noto Sans KR",sans-serif;font-size:14px;font-weight:700;color:var(--sub);display:block}
+
+/* 2·3. 냄비 */
+#meter{display:flex;align-items:center;gap:10px;font-family:"Jua",sans-serif;font-size:clamp(17px,2.4vw,20px);white-space:nowrap;padding:0 16px 14px}
+#meter i{display:block;flex:1;height:22px;border-radius:999px;background:#fff;overflow:hidden;box-shadow:inset 0 0 0 3px var(--lab2)}
+#meter i u{display:block;height:100%;width:0;background:var(--blue);border-radius:999px}
+
+/* 4. 떨어뜨리기 */
+.drops{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.drop{min-height:58px;border-radius:18px;background:#fff;border:3px solid var(--lab2);font-family:"Jua",sans-serif;font-size:clamp(18px,2.4vw,21px);word-break:keep-all;padding:6px}
+.drop:disabled{cursor:default}
+.drop small{display:block;font-family:"Noto Sans KR",sans-serif;font-weight:700;font-size:15px;line-height:1.35;color:var(--sub);margin-top:2px}
+.swatch{display:inline-block;width:22px;height:22px;border-radius:6px;vertical-align:-4px;background:#7d5cc6}
+
+/* 5. 머핀 */
+#muffin{display:none;margin-top:16px}
+#muffin.on{display:block}
+#soda{width:100%;height:40px;accent-color:var(--blue)}
+.slab{display:flex;justify-content:space-between;font-family:"Jua",sans-serif;font-size:18px;padding:0 4px}
+
+/* 6. 퀴즈 */
+.q{background:#fff;border-radius:24px;padding:18px;box-shadow:0 3px 0 var(--line);margin-top:12px}
+.q h3{margin:0 0 12px;font-family:"Jua",sans-serif;font-weight:400;font-size:clamp(21px,2.8vw,26px);line-height:1.4;word-break:keep-all}
+.opts{display:grid;gap:10px}
+.opt{min-height:60px;border-radius:18px;background:var(--cream);border:3px solid var(--line);font-size:clamp(18px,2.3vw,20px);font-weight:700;padding:8px 14px;text-align:left;word-break:keep-all}
+.opt.right{background:#e3f7ec;border-color:var(--ok)}
+.opt.wrong{background:#ffe9e5;border-color:var(--coral);animation:shake .4s}
+.why{margin-top:10px;font-weight:700;display:none;word-break:keep-all;line-height:1.5;font-size:18px}
+.why.on{display:block}
+.why.good{color:var(--ok-d)}
+.why.bad{color:#b23a26}
+
+footer{background:#fff;box-shadow:0 -3px 0 var(--line);padding:14px 16px;text-align:center;font-family:"Jua",sans-serif;color:var(--sub);font-size:16px;line-height:1.6}
+.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(120px);background:var(--ink);color:#fff;border-radius:999px;padding:12px 24px;font-family:"Jua",sans-serif;font-size:19px;transition:transform .25s;z-index:50;white-space:nowrap}
+.toast.on{transform:translateX(-50%)}
+canvas#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:40}
+@media (max-width:760px){
+  nav{grid-template-columns:repeat(3,1fr)}
+  .picks{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:560px){
+  nav{gap:5px}.tab{min-height:62px;border-radius:14px}
+  .share{padding:8px 14px;font-size:16px;min-height:48px}
+  .picks{padding:10px;gap:8px}
+  .pick{min-height:116px;font-size:18px}
+  .pick svg{width:58px;height:58px}
+  .drops{gap:8px}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="head-in">
+    <div class="titles">
+      <div class="brand">어게인 실험과학 수학학원</div>
+      <h1>보라색 국수 실험실</h1>
+    </div>
+    <button class="bbtn sand share" id="share">공유하기</button>
+  </div>
+</header>
+
+<nav id="tabs">
+  <button class="tab on"><span class="n"><span>1</span></span>신맛일까?</button>
+  <button class="tab"><span class="n"><span>2</span></span>적양배추 지시약</button>
+  <button class="tab"><span class="n"><span>3</span></span>보라색 국수 삶기</button>
+  <button class="tab"><span class="n"><span>4</span></span>6가지 물질</button>
+  <button class="tab"><span class="n"><span>5</span></span>자연 속 안토시아닌</button>
+  <button class="tab"><span class="n"><span>6</span></span>퀴즈</button>
+</nav>
+
+<main>
+<section class="panel on">
+  <div class="coach" id="m1">먹으면 <b>신맛이 나는 것</b>을 모두 눌러 동그라미 해 보세요.</div>
+  <div class="stage"><div class="picks" id="sour"></div></div>
+  <div class="row"><button class="bbtn" id="k1">다 골랐어요</button><button class="bbtn plain" id="r1">처음부터 다시</button></div>
+  <div class="card" id="c1"><h3>레몬 · 식초 · 귤처럼 신맛이 나는 성질을 산성이라고 해요!<br>그런데 실험실의 물질은 맛보면 위험해요.</h3><button class="bbtn next">다음 활동</button></div>
+</section>
+
+<section class="panel">
+  <div class="coach" id="m2">냄비에 물이 있어요. 먼저 <b>적양배추</b>를 넣어 보세요.</div>
+  <div class="stage">
+    <svg class="scene" id="pot2" viewBox="0 0 800 440"></svg>
+  </div>
+  <div class="status" id="s2">&nbsp;</div>
+  <div class="row"><button class="bbtn" id="b2">적양배추 넣기</button><button class="bbtn plain" id="r2">처음부터 다시</button></div>
+  <div class="card" id="c2"><h3>적양배추를 끓이면 보라색 색소인 안토시아닌이 우러나 보라색 물이 돼요!<br>안토시아닌은 산성과 염기성에 따라 색이 바뀌는 물질, 지시약이에요.</h3><button class="bbtn next">다음 활동</button></div>
+</section>
+
+<section class="panel">
+  <div class="coach" id="m3">끓는 적양배추 물이에요. <b>하얀 소면</b>을 넣어 보세요.</div>
+  <div class="stage">
+    <svg class="scene" id="pot3" viewBox="0 0 800 440"></svg>
+    <div id="meter">삶은 시간<i><u id="bar"></u></i><span id="min">0분</span></div>
+  </div>
+  <div class="status" id="s3">&nbsp;</div>
+  <div class="row"><button class="bbtn" id="b3">소면 넣기</button><button class="bbtn plain" id="r3">처음부터 다시</button></div>
+  <div class="card" id="c3"><h3>적양배추 속 안토시아닌 색소가 하얀 소면을 물들여 보라색 국수가 됐어요!<br>보라색 국수는 산성과 염기성에 따라 색이 바뀌는 지시약 역할을 해요.</h3><button class="bbtn next">다음 활동</button></div>
+</section>
+
+<section class="panel">
+  <div class="coach" id="m4">물질 이름을 눌러 보라색 국수에 <b>3방울</b> 떨어뜨려 보세요. 처음 색은 <span class="swatch"></span> 보라색이에요.</div>
+  <div class="stage">
+    <svg class="scene" id="dish" viewBox="0 0 800 470"></svg>
+  </div>
+  <div class="drops" id="drops"></div>
+  <div class="status" id="s4">&nbsp;</div>
+  <div class="row"><button class="bbtn plain" id="r4">처음부터 다시</button></div>
+  <div class="card" id="c4"><h3>식초 · 사이다 · 구연산 물은 산성이라 붉은빛,<br>베이킹소다 물 · 과탄산소다 물은 염기성이라 청록색 · 노란빛 초록,<br>우유는 중성에 가까워 거의 그대로예요!</h3><button class="bbtn next">다음 활동</button></div>
+</section>
+
+<section class="panel">
+  <div class="coach" id="m5">안토시아닌은 적양배추에만 있을까요? <b>하나씩 눌러</b> 보세요.</div>
+  <div class="stage"><div class="picks" id="nature"></div></div>
+  <div class="status" id="s5">&nbsp;</div>
+  <div id="muffin">
+    <div class="coach">블루베리 머핀 반죽이에요. 막대를 밀어 <b>베이킹소다</b>를 더 넣어 보세요.</div>
+    <div class="stage">
+      <svg class="scene" id="muf" viewBox="0 0 800 330"></svg>
+      <div style="padding:0 18px 14px">
+        <input type="range" id="soda" min="0" max="100" value="0" aria-label="베이킹소다 양">
+        <div class="slab"><span>조금</span><span>너무 많이</span></div>
+      </div>
+    </div>
+    <div class="status" id="s5b">&nbsp;</div>
+  </div>
+  <div class="card" id="c5"><h3>블루베리 속 안토시아닌도 지시약이에요.<br>베이킹소다를 너무 많이 넣으면 반죽이 염기성이 되어 블루베리가 초록빛을 띨 수 있어요!</h3><button class="bbtn next">다음 활동</button></div>
+</section>
+
+<section class="panel">
+  <div class="coach">정답을 눌러 보세요. 틀려도 다시 고를 수 있어요.</div>
+  <div id="quiz"></div>
+  <div class="card" id="c6"><h3>다섯 문제를 모두 풀었어요!</h3></div>
+</section>
+</main>
+
+<footer>어게인 실험과학 수학학원<br>교육문의 010.2976.5774</footer>
+<div class="toast" id="toast"></div>
+<canvas id="fx"></canvas>
+
+<script>
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const mix = (h1, h2, t) => { const c = h => [1, 3, 5].map(i => parseInt(h.substr(i, 2), 16)), a = c(h1), b = c(h2); return `rgb(${a.map((v, i) => Math.round(lerp(v, b[i], t))).join()})`; };
+const set = (el, attrs) => { for (const k in attrs) el.setAttribute(k, attrs[k]); };
+const PURPLE = '#7d5cc6';
+
+/* 소리 */
+let ac;
+function tone(f, d = .15, at = 0) {
+  try {
+    ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+    const t = ac.currentTime + at, o = ac.createOscillator(), g = ac.createGain();
+    o.type = 'triangle'; o.frequency.value = f; g.gain.setValueAtTime(.16, t); g.gain.exponentialRampToValueAtTime(.001, t + d);
+    o.connect(g).connect(ac.destination); o.start(t); o.stop(t + d);
+  } catch (e) {}
+}
+const good = () => [523, 659, 784].forEach((f, i) => tone(f, .2, i * .08));
+const bad = () => { tone(300, .18); tone(220, .25, .14); };
+const win = () => [523, 659, 784, 1047, 784, 1047].forEach((f, i) => tone(f, .28, i * .1));
+
+/* 반짝이 */
+const cv = $('#fx'), cx = cv.getContext('2d'); let parts = [], fxOn = false;
+const COL = ['#ffd666', '#7b52c9', '#ff8ac4', '#3fae5a', '#d6334f'];
+const fitFx = () => { cv.width = innerWidth; cv.height = innerHeight; };
+addEventListener('resize', fitFx); fitFx();
+function confetti() {
+  for (let i = 0; i < 90; i++) parts.push({ x: Math.random() * innerWidth, y: -Math.random() * 180, vx: Math.random() * 2 - 1, vy: 2 + Math.random() * 3, s: 6 + Math.random() * 5, c: COL[i % 5], life: 170 });
+  if (!fxOn) { fxOn = true; requestAnimationFrame(fxLoop); }
+}
+function fxLoop() {
+  cx.clearRect(0, 0, cv.width, cv.height);
+  parts = parts.filter(p => p.life-- > 0);
+  for (const p of parts) { p.x += p.vx; p.y += p.vy; cx.globalAlpha = Math.min(1, p.life / 25); cx.fillStyle = p.c; cx.fillRect(p.x, p.y, p.s, p.s / 2); }
+  cx.globalAlpha = 1;
+  if (parts.length) requestAnimationFrame(fxLoop); else { fxOn = false; cx.clearRect(0, 0, cv.width, cv.height); }
+}
+
+/* 탭 · 완료 · 공유 */
+const tabs = $$('.tab'), panels = $$('.panel');
+const show = i => { tabs.forEach((t, j) => t.classList.toggle('on', j === i)); panels.forEach((p, j) => p.classList.toggle('on', j === i)); scrollTo(0, 0); };
+tabs.forEach((t, i) => t.onclick = () => show(i));
+$$('.next').forEach(b => b.onclick = () => show(panels.indexOf(b.closest('.panel')) + 1));
+function finish(i) {
+  const c = $('#c' + (i + 1)); c.classList.add('on');
+  setTimeout(() => c.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 200);
+  if (!tabs[i].classList.contains('done')) { tabs[i].classList.add('done'); win(); confetti(); } else good();
+}
+const unfinish = i => $('#c' + (i + 1)).classList.remove('on');
+const toast = t => { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('on'), 2000); };
+$('#share').onclick = async () => {
+  const url = location.href;
+  if (navigator.share) { try { await navigator.share({ title: '보라색 국수 실험실', text: '어게인 실험과학 수학학원 · 보라색 국수 실험실', url }); return; } catch (e) { if (e.name === 'AbortError') return; } }
+  try { await navigator.clipboard.writeText(url); } catch (e) { const t = document.createElement('textarea'); t.value = url; document.body.append(t); t.select(); document.execCommand('copy'); t.remove(); }
+  toast('주소가 복사됐어요');
+};
+
+/* 패널마다 도는 그림 */
+const acts = []; let last = performance.now();
+(function loop(now) { const dt = Math.min(.05, (now - last) / 1000); last = now; const i = panels.findIndex(p => p.classList.contains('on')); acts[i] && acts[i](dt, now / 1000); requestAnimationFrame(loop); })(last);
+
+/* 냄비 그림 (2·3 같이 씀) */
+function potSVG(svg) {
+  svg.innerHTML = `
+    <defs><clipPath id="${svg.id}c"><path d="M210 170 L230 360 Q232 384 258 384 L542 384 Q568 384 570 360 L590 170 Z"/></clipPath></defs>
+    <rect x="300" y="400" width="200" height="22" rx="8" fill="#6c7a8a"/>
+    <g class="fire" opacity="0">${[330, 370, 400, 430, 470].map((x, i) => `<path d="M${x} 400 q-12 -22 0 -40 q12 18 0 40z" fill="${i % 2 ? '#ffb340' : '#ff6a3d'}"/>`).join('')}</g>
+    <g clip-path="url(#${svg.id}c)">
+      <rect class="water" x="200" y="200" width="400" height="200" fill="#d8ecff"/>
+      <g class="inside"></g>
+      <g class="bubbles"></g>
+    </g>
+    <path d="M206 160 L228 362 Q230 390 260 390 L540 390 Q570 390 572 362 L594 160" fill="none" stroke="#51627a" stroke-width="10" stroke-linecap="round"/>
+    <path d="M196 160 H604" stroke="#51627a" stroke-width="12" stroke-linecap="round"/>
+    <path d="M196 190 h-40 M604 190 h40" stroke="#51627a" stroke-width="14" stroke-linecap="round"/>
+    <text class="label" x="400" y="60" font-size="36" fill="#33414f"></text>`;
+  const B = [...Array(14)].map((_, i) => { const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle'); set(c, { r: 5 + (i % 3) * 3, fill: 'none', stroke: '#fff', 'stroke-width': 3 }); svg.querySelector('.bubbles').append(c); return { c, x: 240 + (i * 151) % 320, y: 400 - (i * 37) % 200, v: 50 + (i % 4) * 25 }; });
+  return {
+    water: svg.querySelector('.water'), fire: svg.querySelector('.fire'), inside: svg.querySelector('.inside'), label: svg.querySelector('.label'),
+    bubble(on, dt) { B.forEach(b => { b.c.setAttribute('opacity', on ? .8 : 0); if (!on) return; b.y -= b.v * dt; if (b.y < 205) b.y = 390; set(b.c, { cx: b.x, cy: b.y }); }); }
+  };
+}
+
+/* ===== 1. 신맛일까? ===== */
+(() => {
+  const ICON = {
+    lemon: '<ellipse cx="40" cy="42" rx="30" ry="22" fill="#ffe14d" stroke="#e0b52e" stroke-width="3"/><path d="M68 40l8-3M12 44l-8 3" stroke="#e0b52e" stroke-width="5" stroke-linecap="round"/><path d="M40 20q6-10 16-10" stroke="#3fae5a" stroke-width="4" fill="none"/>',
+    vinegar: '<rect x="32" y="6" width="16" height="14" rx="3" fill="#d6334f"/><path d="M34 20h12v8l10 10v34a4 4 0 0 1-4 4H28a4 4 0 0 1-4-4V38l10-10z" fill="#fff4d6" stroke="#b08a3e" stroke-width="3"/><rect x="26" y="46" width="28" height="18" fill="#ffd666"/>',
+    milk: '<path d="M22 28l8-18h20l8 18v44H22z" fill="#fff" stroke="#3a9ae0" stroke-width="3"/><path d="M22 28h36" stroke="#3a9ae0" stroke-width="3"/><rect x="22" y="44" width="36" height="16" fill="#9fd8ff"/>',
+    soap: '<rect x="10" y="28" width="60" height="34" rx="12" fill="#ffc6e0" stroke="#e0457b" stroke-width="3"/><circle cx="58" cy="18" r="8" fill="none" stroke="#9fd8ff" stroke-width="3"/><circle cx="44" cy="12" r="5" fill="none" stroke="#9fd8ff" stroke-width="3"/>',
+    tangerine: '<circle cx="40" cy="44" r="27" fill="#ff9f2e" stroke="#e07a10" stroke-width="3"/><path d="M40 18q4-10 14-10" stroke="#3fae5a" stroke-width="4" fill="none"/><circle cx="32" cy="38" r="3" fill="#ffc06a"/>'
+  };
+  const ITEMS = [['lemon', '레몬', 1], ['vinegar', '식초', 1], ['milk', '우유', 0], ['soap', '비누', 0], ['tangerine', '귤', 1]];
+  const say = t => $('#m1').innerHTML = t;
+  function build() {
+    const box = $('#sour'); box.innerHTML = ''; unfinish(0); say('먹으면 <b>신맛이 나는 것</b>을 모두 눌러 동그라미 해 보세요.');
+    ITEMS.forEach(([k, name]) => {
+      const b = document.createElement('button'); b.className = 'pick'; b.dataset.k = k;
+      b.innerHTML = `<svg viewBox="0 0 80 80">${ICON[k]}</svg>${name}`;
+      b.onclick = () => { b.classList.toggle('sel'); tone(b.classList.contains('sel') ? 660 : 440, .08); };
+      box.append(b);
+    });
+  }
+  build(); $('#r1').onclick = build;
+  $('#k1').onclick = () => {
+    const els = $$('#sour .pick'), sel = k => els.find(e => e.dataset.k === k).classList.contains('sel');
+    const shake = k => { const e = els.find(x => x.dataset.k === k); e.classList.remove('wrong'); void e.offsetWidth; e.classList.add('wrong'); };
+    if (sel('soap')) { bad(); shake('soap'); return say('<b>비누는 먹는 것이 아니에요!</b> 비누의 동그라미를 지워 보세요.'); }
+    if (sel('milk')) { bad(); shake('milk'); return say('<b>우유는 신맛이 거의 없어요.</b> 우유의 동그라미를 지워 보세요.'); }
+    const miss = ITEMS.filter(([k, , a]) => a && !sel(k));
+    if (miss.length) { bad(); return say(`신맛이 나는 것이 <b>${miss.length}개 더</b> 있어요. 다시 찾아보세요.`); }
+    say('맞아요! <b>레몬 · 식초 · 귤</b>은 먹으면 신맛이 나요.'); finish(0);
+  };
+})();
+
+/* ===== 2. 적양배추 지시약 ===== */
+(() => {
+  const P = potSVG($('#pot2')), btn = $('#b2');
+  let stage, t;   // 0 물만, 1 적양배추 넣음, 2 끓는 중
+  function reset() {
+    stage = 0; t = 0; unfinish(1); btn.hidden = false; btn.textContent = '적양배추 넣기';
+    P.inside.innerHTML = ''; $('#m2').innerHTML = '냄비에 물이 있어요. 먼저 <b>적양배추</b>를 넣어 보세요.'; $('#s2').textContent = '맑은 물이에요.';
+  }
+  reset(); $('#r2').onclick = reset;
+  btn.onclick = () => {
+    if (stage === 0) {
+      stage = 1; tone(500, .1); btn.textContent = '불 켜서 끓이기';
+      P.inside.innerHTML = [[270, 330], [330, 300], [390, 340], [450, 310], [510, 335], [300, 360], [480, 362]].map(([x, y], i) => `<path d="M${x} ${y} q20 -26 46 -6 q-8 26 -46 6z" fill="#7a2f8f" stroke="#c9a0e0" stroke-width="3" transform="rotate(${i * 40 - 60} ${x + 20} ${y})"/>`).join('');
+      $('#m2').innerHTML = '잘게 썬 <b>적양배추</b>를 넣었어요. 이제 불을 켜서 끓여 보세요.'; $('#s2').textContent = '아직 물 색은 그대로예요.';
+    } else if (stage === 1) { stage = 2; btn.hidden = true; tone(380, .2); $('#m2').innerHTML = '보글보글 끓고 있어요. 물 색을 <b>잘 보세요!</b>'; }
+  };
+  acts[1] = dt => {
+    if (stage === 2) t = clamp(t + dt / 5);
+    P.fire.setAttribute('opacity', stage === 2 ? .9 + Math.sin(performance.now() / 80) * .1 : 0);
+    P.bubble(stage === 2, dt);
+    P.water.setAttribute('fill', mix('#d8ecff', '#6b3aa8', t));
+    P.label.textContent = stage === 0 ? '물' : stage === 1 ? '물 + 적양배추' : t < 1 ? '색소가 우러나요…' : '보라색 적양배추 물';
+    if (stage === 2) $('#s2').textContent = t < .3 ? '물이 끓기 시작했어요.' : t < 1 ? '안토시아닌이 우러나 물이 보라색으로 변해요!' : '보라색 적양배추 물이 됐어요!';
+    if (stage === 2 && t >= 1 && !$('#c2').classList.contains('on')) finish(1);
+  };
+})();
+
+/* ===== 3. 보라색 국수 삶기 ===== */
+(() => {
+  const svg = $('#pot3'), P = potSVG(svg), btn = $('#b3');
+  P.water.setAttribute('fill', '#6b3aa8');
+  P.inside.innerHTML = `<g class="nd">${[...Array(9)].map((_, i) => `<path d="M${250 + i * 34} 230 q18 40 -6 80 t8 70" fill="none" stroke-width="7" stroke-linecap="round"/>`).join('')}</g>`;
+  const nd = svg.querySelector('.nd');
+  const plate = document.createElementNS('http://www.w3.org/2000/svg', 'g'); svg.append(plate);
+  plate.innerHTML = [['하얀 소면', 230, 'pw'], ['보라색 국수', 570, 'pp']].map(([t, x, c]) => `
+    <ellipse cx="${x}" cy="300" rx="150" ry="58" fill="#fff" stroke="#c4cbd6" stroke-width="5"/>
+    <g class="${c}" fill="none" stroke-width="8" stroke-linecap="round">${[...Array(7)].map((_, i) => `<path d="M${x - 90 + i * 28} 275 q14 20 -4 40 t10 20"/>`).join('')}</g>
+    <text x="${x}" y="200" font-size="34" fill="#33414f">${t}</text>`).join('');
+  plate.querySelector('.pw').setAttribute('stroke', '#f6f1e3');
+    let stage, cook, stirring;   // 0 넣기 전, 1 삶는 중, 2 다 삶음, 3 건짐
+  function reset() {
+    stage = 0; cook = 0; stirring = false; unfinish(2); btn.hidden = false; btn.textContent = '소면 넣기';
+    $('#m3').innerHTML = '끓는 적양배추 물이에요. <b>하얀 소면</b>을 넣어 보세요.'; $('#s3').textContent = '삶기 전 소면은 하얀색이에요.';
+  }
+  reset(); $('#r3').onclick = reset;
+  btn.onclick = () => {
+    if (stage === 0) { stage = 1; btn.hidden = true; tone(500, .1); $('#m3').innerHTML = '냄비를 <b>꾹 누르고 있으면</b> 긴 젓가락으로 저으며 삶아요. 3분 동안 저어 보세요.'; }
+    else if (stage === 2) { stage = 3; btn.hidden = true; tone(600, .12); $('#m3').innerHTML = '체에 건져 찬물에 헹궜어요. <b>하얀 소면</b>과 비교해 보세요.'; $('#s3').textContent = '하얀 소면이 푸른빛이 도는 보라색 국수가 됐어요!'; finish(2); }
+  };
+  svg.addEventListener('pointerdown', e => { if (stage === 1) { stirring = true; try { svg.setPointerCapture(e.pointerId); } catch (_) {} e.preventDefault(); } });
+  const stop = () => stirring = false;
+  svg.addEventListener('pointerup', stop); svg.addEventListener('pointercancel', stop);
+  acts[2] = (dt, now) => {
+    if (stage === 1 && stirring) cook = clamp(cook + dt / 4);
+    if (stage === 1 && cook >= 1) { stage = 2; stirring = false; good(); btn.hidden = false; btn.textContent = '체에 건져 헹구기'; $('#m3').innerHTML = '3분쯤 삶았어요. 이제 <b>체에 건져</b> 찬물에 헹궈 보세요.'; }
+    const onPot = stage < 3;
+    $$('#pot3 > *').forEach(el => { if (el !== plate) el.style.display = onPot ? '' : 'none'; });
+    plate.style.display = onPot ? 'none' : '';
+    $('#meter').style.visibility = stage === 0 || stage === 3 ? 'hidden' : 'visible';
+    P.fire.setAttribute('opacity', onPot ? .9 + Math.sin(now * 12) * .1 : 0);
+    P.bubble(onPot, dt);
+    nd.style.display = stage >= 1 ? '' : 'none';
+    nd.setAttribute('stroke', mix('#f6f1e3', '#a58fe8', cook));
+    nd.setAttribute('transform', stirring ? `rotate(${Math.sin(now * 8) * 6} 400 300)` : '');
+    plate.querySelector('.pp').setAttribute('stroke', '#5e4bc0');
+    $('#bar').style.width = cook * 100 + '%'; $('#min').textContent = Math.floor(cook * 3 + .001) + '분';
+    P.label.textContent = stage === 0 ? '끓는 적양배추 물' : stirring ? '젓는 중…' : stage === 1 ? '냄비를 꾹 눌러 저어요' : '';
+    if (stage === 1) $('#s3').textContent = cook < .05 ? '소면이 아직 하얀색이에요.' : '소면에 보라색 물이 들고 있어요!';
+  };
+})();
+
+/* ===== 4. 6가지 물질 떨어뜨리기 ===== */
+(() => {
+  const svg = $('#dish');
+  const S = [
+    ['우유', '#8466c4', '거의 그대로 보라색', '중성에 가까워요'],
+    ['식초', '#d6334f', '붉은색', '산성이에요'],
+    ['사이다', '#ec6f9c', '붉은빛 분홍', '산성이에요'],
+    ['베이킹소다 물', '#2a9d8f', '청록색(푸른빛 초록)', '염기성이에요'],
+    ['과탄산소다 물', '#a9c93a', '노란빛 초록', '염기성이에요'],
+    ['구연산 물', '#d32f45', '붉은색', '산성이에요']
+  ];
+  const CELL = S.map((_, i) => [140 + (i % 3) * 260, 140 + Math.floor(i / 3) * 210]);
+  svg.innerHTML = `<rect x="14" y="14" width="772" height="442" rx="30" fill="#fff" stroke="#c4cbd6" stroke-width="5"/>` + S.map(([n], i) => {
+    const [x, y] = CELL[i];
+    return `<rect x="${x - 115}" y="${y - 95}" width="230" height="190" rx="22" fill="#f5f6fa" stroke="#d6dbe6" stroke-width="4"/>
+      <g class="nd${i}" fill="none" stroke-width="9" stroke-linecap="round">${[...Array(6)].map((_, k) => `<path d="M${x - 70 + k * 28} ${y - 10} q14 22 -4 44 t10 18"/>`).join('')}</g>
+      <text x="${x}" y="${y - 56}" font-size="34" fill="#33414f">${n}</text>
+      <g class="dp${i}" opacity="0"><rect x="${x - 9}" y="${y - 150}" width="18" height="56" rx="6" fill="#dfe6f2" stroke="#6c7a8a" stroke-width="3"/><rect x="${x - 15}" y="${y - 170}" width="30" height="24" rx="10" fill="#e0457b"/><circle class="dr${i}" cx="${x}" cy="${y - 88}" r="7" fill="#9fd8ff"/></g>`;
+  }).join('');
+  let st;
+  const box = $('#drops');
+  S.forEach(([n], i) => { const b = document.createElement('button'); b.className = 'drop'; b.textContent = n; b.onclick = () => go(i, b); box.append(b); });
+  function reset() {
+    st = S.map(() => ({ t: -1 })); unfinish(3); $$('.drop').forEach(b => b.disabled = false);
+    $$('.drop').forEach((b, i) => { b.textContent = S[i][0]; b.style.borderColor = ''; });
+    $('#s4').textContent = '';
+  }
+  reset(); $('#r4').onclick = reset;
+  function go(i, b) { if (st[i].t >= 0) return; st[i].t = 0; b.disabled = true; tone(700, .08); }
+  acts[3] = dt => {
+    S.forEach(([n, col, cname, kind], i) => {
+      const s = st[i], g = svg.querySelector('.nd' + i), dp = svg.querySelector('.dp' + i), dr = svg.querySelector('.dr' + i), [, y] = CELL[i];
+      if (s.t < 0) { g.setAttribute('stroke', PURPLE); dp.setAttribute('opacity', 0); return; }
+      const was = s.t; s.t += dt;
+      const drops = Math.min(3, Math.floor(s.t / .45));
+      dp.setAttribute('opacity', s.t < 1.5 ? 1 : 0);
+      dr.setAttribute('cy', y - 88 + ((s.t / .45) % 1) * 70);
+      if (Math.floor(was / .45) !== Math.floor(s.t / .45) && drops <= 3 && s.t < 1.4) tone(900, .05);
+      const c = clamp((s.t - .4) / 1.4);
+      g.setAttribute('stroke', mix(PURPLE, col, c));
+      if (was < 1.8 && s.t >= 1.8) {
+        const bt = $$('.drop')[i]; bt.innerHTML = `${n}<small>${cname}<br>${kind}</small>`; bt.style.borderColor = col;
+        $('#s4').textContent = `${n} → ${cname}. ${n}은(는) ${kind}!`.replace('은(는)', /[가-힣]$/.test(n) && (n.charCodeAt(n.length - 1) - 0xac00) % 28 ? '은' : '는');
+        good();
+        if (st.every(x => x.t >= 1.8)) finish(3);
+      }
+    });
+  };
+})();
+
+/* ===== 5. 자연 속 안토시아닌 ===== */
+(() => {
+  const ICON = {
+    berry: '<circle cx="28" cy="46" r="17" fill="#3d4fa0"/><circle cx="52" cy="40" r="17" fill="#4a5cb8"/><path d="M48 28l4-5 4 5" stroke="#26306a" stroke-width="3" fill="none"/>',
+    potato: '<ellipse cx="40" cy="42" rx="32" ry="20" fill="#7a2f8f" transform="rotate(-15 40 42)"/><ellipse cx="40" cy="42" rx="14" ry="9" fill="#b05ad0" transform="rotate(-15 40 42)"/>',
+    bean: '<ellipse cx="26" cy="40" rx="15" ry="11" fill="#22202e"/><ellipse cx="54" cy="46" rx="15" ry="11" fill="#2e2a3e"/><ellipse cx="42" cy="24" rx="12" ry="9" fill="#22202e"/>',
+    grape: '<g fill="#6a2c8c">' + [[28, 26], [44, 26], [60, 26], [36, 40], [52, 40], [44, 54], [44, 68]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="9"/>`).join('') + '</g><path d="M44 16v-8" stroke="#3fae5a" stroke-width="4"/>',
+    leaf: '<path d="M40 8l7 18 18-6-8 17 15 9-19 4 3 18-16-11-16 11 3-18-19-4 15-9-8-17 18 6z" fill="#d6334f"/><path d="M40 40v34" stroke="#8a2030" stroke-width="4"/>'
+  };
+  const ITEMS = [
+    ['berry', '블루베리', '블루베리에 안토시아닌이 들어 있어요.'],
+    ['potato', '자색고구마', '자색고구마에 안토시아닌이 들어 있어요.'],
+    ['bean', '검은콩 껍질', '검은콩 껍질에도 안토시아닌이 들어 있어요.'],
+    ['grape', '포도 껍질', '포도 껍질에도 안토시아닌이 들어 있어요.'],
+    ['leaf', '붉은 단풍잎', '가을 단풍잎의 붉은색도 안토시아닌 색이에요.']
+  ];
+  const box = $('#nature'); let seen = 0;
+  ITEMS.forEach(([k, name, fact]) => {
+    const b = document.createElement('button'); b.className = 'pick';
+    b.innerHTML = `<svg viewBox="0 0 80 80">${ICON[k]}</svg>${name}<small>&nbsp;</small>`;
+    b.onclick = () => {
+      $('#s5').textContent = fact; tone(660, .1);
+      if (b.classList.contains('seen')) return;
+      b.classList.add('seen'); b.querySelector('small').textContent = '안토시아닌!';
+      if (++seen === ITEMS.length) { $('#m5').innerHTML = '안토시아닌이 많은 식물은 <b>보라 · 붉은빛</b>을 띠어요. 아래 머핀도 살펴보세요!'; $('#muffin').classList.add('on'); good(); setTimeout(() => $('#muffin').scrollIntoView({ behavior: 'smooth', block: 'start' }), 300); }
+    };
+    box.append(b);
+  });
+  const svg = $('#muf');
+  const BERRY = [[300, 180], [360, 150], [430, 175], [490, 150], [340, 215], [460, 215], [400, 125], [520, 195], [280, 140]];
+  svg.innerHTML = `<path d="M230 220 L270 310 H530 L570 220 Z" fill="#ffb3c7" stroke="#e0457b" stroke-width="5"/>
+    <path d="M250 225 Q230 120 330 100 Q400 50 470 100 Q570 120 550 225 Z" fill="#f2d39a" stroke="#c9a060" stroke-width="5"/>
+    <g id="berries">${BERRY.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="16"/>`).join('')}</g>
+    <text id="mufT" x="400" y="40" font-size="30" fill="#33414f">베이킹소다 조금</text>`;
+  const paint = () => {
+    const v = $('#soda').value / 100, g = clamp((v - .4) / .6);
+    $('#berries').setAttribute('fill', mix('#4a3f9e', '#3e8f4e', g));
+    $('#mufT').textContent = v < .4 ? '베이킹소다 조금' : v < 1 ? '베이킹소다를 더 넣는 중' : '베이킹소다 너무 많이';
+    $('#s5b').textContent = v < .4 ? '블루베리가 보랏빛이에요.' : v < 1 ? '블루베리 색이 변하고 있어요…' : '블루베리가 초록빛을 띠어요!';
+    if (v >= 1 && !$('#c5').classList.contains('on')) finish(4);
+  };
+  $('#soda').oninput = paint; paint();
+})();
+
+/* ===== 6. 퀴즈 ===== */
+(() => {
+  const Q = [
+    ['식초처럼 신맛이 나는 물질의 성질을 무엇이라고 할까요?', [['염기성', '염기성은 산성과 반대되는 성질이에요.'], ['산성'], ['중성', '중성은 물처럼 산성도 염기성도 아닌 것이에요.']], '맞아요! 신맛이 나는 성질이 산성이에요.'],
+    ['산성과 반대되는 성질은 무엇일까요?', [['중성', '중성은 물처럼 산성도 염기성도 아닌 것이에요.'], ['신맛', '신맛은 산성 물질에서 나는 맛이에요.'], ['염기성']], '맞아요! 산성과 반대되는 성질이 염기성이에요.'],
+    ['산성과 염기성에 따라 색이 바뀌는 물질을 무엇이라고 할까요?', [['지시약'], ['소면', '소면은 하얀 국수예요. 적양배추 물에 삶아야 색이 들어요.'], ['비눗물', '비눗물은 염기성 물질이에요.']], '맞아요! 지시약은 색으로 산성과 염기성을 알려 줘요.'],
+    ['적양배추 속 보라색 색소의 이름은 무엇일까요?', [['리트머스', '리트머스 종이는 실험실의 지시약이에요.'], ['안토시아닌'], ['구연산 물', '구연산 물은 산성 물질이에요.']], '맞아요! 적양배추 속 보라색 색소는 안토시아닌이에요.'],
+    ['보라색 국수에 베이킹소다 물을 떨어뜨리면 무슨 색이 될까요?', [['붉은색', '붉은색은 식초나 구연산 물 같은 산성 물질을 떨어뜨렸을 때예요.'], ['그대로 보라색', '거의 그대로인 것은 중성에 가까운 우유였어요.'], ['청록색(푸른빛 초록)']], '맞아요! 베이킹소다 물은 염기성이라 보라색 국수가 청록색이 돼요.']
+  ];
+  let left = Q.length;
+  Q.forEach(([q, opts, ok], i) => {
+    const box = document.createElement('div'); box.className = 'q';
+    box.innerHTML = `<h3>${i + 1}. ${q}</h3><div class="opts"></div><div class="why"></div>`;
+    const why = box.querySelector('.why'); let solved = false;
+    opts.forEach(([label, msg]) => {
+      const b = document.createElement('button'); b.className = 'opt'; b.textContent = label;
+      b.onclick = () => {
+        if (solved) return;
+        if (msg) { bad(); b.classList.remove('wrong'); void b.offsetWidth; b.classList.add('wrong'); why.className = 'why on bad'; why.textContent = msg; return; }
+        solved = true; good(); b.classList.add('right'); why.className = 'why on good'; why.textContent = ok;
+        if (--left === 0) finish(5);
+      };
+      box.querySelector('.opts').append(b);
+    });
+    $('#quiz').append(box);
+  });
+})();
+</script>
+</body>
+</html>
