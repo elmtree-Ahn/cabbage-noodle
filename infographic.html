@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>보라색 국수 인포그래픽</title>
+<!-- 714×460 CSS px, 3배로 찍어 2142×1380 PNG -->
+<style>
+:root{--ink:#2E2142;--purple:#5B3A8C;--soft:#EFE8F7;--bg:#FBF8F3;--line:#E4DCEB;
+  --red:#D2384F;--violet:#7A5CB0;--teal:#1F9E95;--lime:#A3BE35}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:714px;height:460px;overflow:hidden}
+body{background:var(--bg);color:var(--ink);font-family:"Apple SD Gothic Neo","Noto Sans KR",sans-serif;letter-spacing:-0.02em;padding:14px 16px}
+.title{height:50px;background:var(--purple);color:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:25px;font-weight:800}
+.cards{display:flex;gap:12px;margin-top:12px}
+.card{flex:1;height:190px;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:10px 10px 12px;display:flex;flex-direction:column;align-items:center}
+.head{display:flex;align-items:center;gap:7px}
+.num{width:26px;height:26px;border-radius:50%;background:var(--purple);color:#fff;font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.word{font-size:24px;font-weight:800;color:var(--purple)}
+.card svg{flex:1;width:100%;margin:4px 0}
+.sent{font-size:15.5px;font-weight:700;text-align:center;line-height:1.3}
+.result{margin-top:12px;height:112px;background:#fff;border:1.5px solid var(--line);border-radius:14px;display:flex;align-items:center;padding:0 12px}
+.rlabel{width:58px;font-size:16px;font-weight:800;color:var(--purple);line-height:1.25;text-align:center;border-right:1.5px solid var(--line);margin-right:6px;padding-right:6px}
+.item{flex:1;display:flex;flex-direction:column;align-items:center}
+.item svg{width:96px;height:44px}
+.sub{font-size:13px;font-weight:700;margin-top:3px}
+.col{font-size:14.5px;font-weight:800;margin-top:1px}
+.bottom{margin-top:12px;height:44px;background:var(--soft);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:var(--purple)}
+</style></head><body>
+<div class="title">오늘의 핵심 · 보라색 국수의 비밀</div>
+
+<div class="cards">
+  <div class="card">
+    <div class="head"><span class="num">1</span><span class="word">산성</span></div>
+    <svg viewBox="0 0 200 90">
+      <!-- 레몬 반쪽 -->
+      <circle cx="68" cy="52" r="32" fill="#F6D44A"/>
+      <circle cx="68" cy="52" r="26" fill="#FCEB8E"/>
+      <g stroke="#F6D44A" stroke-width="2.5">
+        <line x1="68" y1="26" x2="68" y2="78"/><line x1="42" y1="52" x2="94" y2="52"/>
+        <line x1="50" y1="34" x2="86" y2="70"/><line x1="86" y1="34" x2="50" y2="70"/>
+      </g>
+      <circle cx="68" cy="52" r="4" fill="#fff"/>
+      <!-- 식초병 -->
+      <rect x="128" y="8" width="12" height="12" rx="2" fill="#8C7AA8"/>
+      <path d="M126 20 h16 v10 q14 6 14 20 v32 q0 6 -6 6 h-32 q-6 0 -6 -6 v-32 q0 -14 14 -20z" fill="#EAF4F8" stroke="#9FB7C4" stroke-width="2"/>
+      <path d="M114 50 h40 v32 q0 4 -4 4 h-32 q-4 0 -4 -4z" fill="#D7ECF3"/>
+    </svg>
+    <div class="sent">식초처럼 신맛이 나는 성질</div>
+  </div>
+
+  <div class="card">
+    <div class="head"><span class="num">2</span><span class="word">염기성</span></div>
+    <svg viewBox="0 0 200 90">
+      <!-- 비눗물 컵 -->
+      <path d="M48 26 h52 l-6 58 q-1 4 -5 4 h-30 q-4 0 -5 -4z" fill="#F4F6F8" stroke="#A9B6C2" stroke-width="2"/>
+      <path d="M52 44 h44 l-4 40 q-1 3 -4 3 h-28 q-3 0 -4 -3z" fill="#E3E8EE"/>
+      <g fill="#fff" stroke="#B9C4CE" stroke-width="1.5">
+        <circle cx="58" cy="26" r="8"/><circle cx="72" cy="20" r="10"/><circle cx="88" cy="24" r="9"/>
+        <circle cx="98" cy="14" r="5"/><circle cx="46" cy="16" r="4"/>
+      </g>
+      <!-- 고체 비누 -->
+      <rect x="120" y="54" width="54" height="30" rx="12" fill="#BFE3D6" stroke="#8CC5B1" stroke-width="2"/>
+      <rect x="128" y="60" width="38" height="10" rx="5" fill="#D9F0E7"/>
+    </svg>
+    <div class="sent">산성과 반대되는 성질</div>
+  </div>
+
+  <div class="card">
+    <div class="head"><span class="num">3</span><span class="word">지시약</span></div>
+    <svg viewBox="0 0 200 90">
+      <!-- 적양배추 반쪽 -->
+      <circle cx="66" cy="52" r="34" fill="#6B2E73"/>
+      <g fill="none" stroke="#F1E6F3" stroke-width="2.5" stroke-linecap="round">
+        <path d="M66 86 q-4 -30 0 -60"/>
+        <path d="M62 70 q-22 -6 -24 -30"/><path d="M70 70 q22 -6 24 -30"/>
+        <path d="M62 56 q-12 -6 -12 -22"/><path d="M70 56 q12 -6 12 -22"/>
+      </g>
+      <!-- 적양배추 물 병 -->
+      <rect x="134" y="14" width="22" height="10" rx="2" fill="#B8A6C9"/>
+      <path d="M130 24 h30 v6 q8 4 8 14 v38 q0 6 -6 6 h-34 q-6 0 -6 -6 v-38 q0 -10 8 -14z" fill="#F5F0FA" stroke="#B8A6C9" stroke-width="2"/>
+      <path d="M126 46 h42 v36 q0 4 -4 4 h-34 q-4 0 -4 -4z" fill="#6E4FA8"/>
+    </svg>
+    <div class="sent">적양배추 속 안토시아닌</div>
+  </div>
+</div>
+
+<div class="result">
+  <div class="rlabel">결과<br>한눈에</div>
+  <div class="item"><svg viewBox="0 0 96 44"><ellipse cx="48" cy="26" rx="44" ry="15" fill="#fff" stroke="#CFC6D8" stroke-width="2"/><g fill="none" stroke="var(--red)" stroke-width="3" stroke-linecap="round" transform="translate(0,2)"><path d="M22 24 q8 -8 16 0 t16 0 t16 0"/><path d="M24 30 q8 -8 16 0 t16 0 t14 0"/><path d="M30 18 q8 -6 16 0 t16 0"/></g></svg>
+    <div class="sub">식초 · 구연산 물</div><div class="col" style="color:var(--red)">붉은색</div></div>
+  <div class="item"><svg viewBox="0 0 96 44"><ellipse cx="48" cy="26" rx="44" ry="15" fill="#fff" stroke="#CFC6D8" stroke-width="2"/><g fill="none" stroke="var(--violet)" stroke-width="3" stroke-linecap="round" transform="translate(0,2)"><path d="M22 24 q8 -8 16 0 t16 0 t16 0"/><path d="M24 30 q8 -8 16 0 t16 0 t14 0"/><path d="M30 18 q8 -6 16 0 t16 0"/></g></svg>
+    <div class="sub">우유</div><div class="col" style="color:var(--violet)">거의 그대로 보라</div></div>
+  <div class="item"><svg viewBox="0 0 96 44"><ellipse cx="48" cy="26" rx="44" ry="15" fill="#fff" stroke="#CFC6D8" stroke-width="2"/><g fill="none" stroke="var(--teal)" stroke-width="3" stroke-linecap="round" transform="translate(0,2)"><path d="M22 24 q8 -8 16 0 t16 0 t16 0"/><path d="M24 30 q8 -8 16 0 t16 0 t14 0"/><path d="M30 18 q8 -6 16 0 t16 0"/></g></svg>
+    <div class="sub">베이킹소다 물</div><div class="col" style="color:var(--teal)">청록색</div></div>
+  <div class="item"><svg viewBox="0 0 96 44"><ellipse cx="48" cy="26" rx="44" ry="15" fill="#fff" stroke="#CFC6D8" stroke-width="2"/><g fill="none" stroke="var(--lime)" stroke-width="3" stroke-linecap="round" transform="translate(0,2)"><path d="M22 24 q8 -8 16 0 t16 0 t16 0"/><path d="M24 30 q8 -8 16 0 t16 0 t14 0"/><path d="M30 18 q8 -6 16 0 t16 0"/></g></svg>
+    <div class="sub">과탄산소다 물</div><div class="col" style="color:#7E9A1E">노란빛 초록</div></div>
+</div>
+
+<div class="bottom">국수 색을 보면 산성과 염기성을 구분할 수 있다!</div>
+</body></html>
